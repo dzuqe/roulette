@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
-abstract contract Roulette is VRFConsumerBase {
+contract Roulette is VRFConsumerBase {
     mapping(int => mapping(int => int)) private board; 
 
     // chainlink
@@ -18,10 +18,11 @@ abstract contract Roulette is VRFConsumerBase {
     event NumberGen(bytes32 indexed id, address indexed player);
     event NumberResult(bytes32 indexed id, uint256 indexed value);
 
-    constructor(address vrfCoordinator, address link, bytes32 keyHash, uint256 fee) {
+    constructor(address vrfCoordinator, address link, bytes32 keyHash, uint256 fee) 
+      public VRFConsumerBase(vrfCoordinator, link)
+    {
       s_keyHash = keyHash;
       s_fee = fee;
-      coordinator = vrfCoordinator;
 
       int i = 0;
       for (int y = 0; y < 12; y++) {
